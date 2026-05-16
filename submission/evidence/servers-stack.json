@@ -1,0 +1,74 @@
+{
+    "Stacks": [
+        {
+            "StackId": "arn:aws:cloudformation:us-west-2:835207447818:stack/udagram-servers/46f7d920-50ca-11f1-8619-0a5b5412e449",
+            "StackName": "udagram-servers",
+            "Description": "Highly available Udagram web servers, load balancer, and Auto Scaling group.",
+            "Parameters": [
+                {
+                    "ParameterKey": "MinSize",
+                    "ParameterValue": "4"
+                },
+                {
+                    "ParameterKey": "ProjectName",
+                    "ParameterValue": "udagram-ha"
+                },
+                {
+                    "ParameterKey": "EnvironmentName",
+                    "ParameterValue": "prod"
+                },
+                {
+                    "ParameterKey": "ImageId",
+                    "ParameterValue": "ami-0265204e4c65dc79b"
+                },
+                {
+                    "ParameterKey": "DesiredCapacity",
+                    "ParameterValue": "4"
+                },
+                {
+                    "ParameterKey": "InstanceType",
+                    "ParameterValue": "t3.medium"
+                },
+                {
+                    "ParameterKey": "MaxSize",
+                    "ParameterValue": "4"
+                }
+            ],
+            "CreationTime": "2026-05-16T01:55:12.975000+00:00",
+            "RollbackConfiguration": {},
+            "StackStatus": "CREATE_COMPLETE",
+            "DisableRollback": false,
+            "NotificationARNs": [],
+            "Capabilities": [
+                "CAPABILITY_NAMED_IAM"
+            ],
+            "Outputs": [
+                {
+                    "OutputKey": "LoadBalancerDNSName",
+                    "OutputValue": "http://udagra-Appli-SJLJeYkoiYvq-788156309.us-west-2.elb.amazonaws.com",
+                    "Description": "Public URL of the deployed high availability web application.",
+                    "ExportName": "udagram-ha-LoadBalancerURL"
+                },
+                {
+                    "OutputKey": "TargetGroupArn",
+                    "OutputValue": "arn:aws:elasticloadbalancing:us-west-2:835207447818:targetgroup/udagra-Targe-QVUKNYZ0IPZ3/fe45f944f6f25820"
+                },
+                {
+                    "OutputKey": "AutoScalingGroupName",
+                    "OutputValue": "udagram-servers-WebAppGroup-2iUsehymbJzI"
+                }
+            ],
+            "Tags": [],
+            "EnableTerminationProtection": false,
+            "DriftInformation": {
+                "StackDriftStatus": "NOT_CHECKED"
+            },
+            "LastOperations": [
+                {
+                    "OperationType": "CREATE_STACK",
+                    "OperationId": "46f911a0-50ca-11f1-8619-0a5b5412e449"
+                }
+            ]
+        }
+    ]
+}

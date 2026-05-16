@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <style>
+    .title { font: 700 30px Arial, sans-serif; fill: #0f172a; }
+    .label { font: 600 18px Arial, sans-serif; fill: #0f172a; }
+    .small { font: 15px Arial, sans-serif; fill: #334155; }
+    .box { fill: #ffffff; stroke: #2563eb; stroke-width: 2; rx: 10; }
+    .vpc { fill: #eff6ff; stroke: #1d4ed8; stroke-width: 3; rx: 16; }
+    .az { fill: #f8fafc; stroke: #94a3b8; stroke-width: 2; rx: 12; }
+    .public { fill: #ecfdf5; stroke: #16a34a; stroke-width: 2; rx: 10; }
+    .private { fill: #fff7ed; stroke: #ea580c; stroke-width: 2; rx: 10; }
+    .arrow { stroke: #0f172a; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#0f172a"/>
+    </marker>
+  </defs>
+
+  <text x="60" y="55" class="title">Udagram High-Availability Web App on AWS</text>
+  <text x="60" y="85" class="small">CloudFormation deploys two stacks: network infrastructure and web application servers.</text>
+
+  <rect x="60" y="125" width="180" height="80" class="box"/>
+  <text x="150" y="160" text-anchor="middle" class="label">Users</text>
+  <text x="150" y="184" text-anchor="middle" class="small">HTTP traffic</text>
+
+  <rect x="330" y="125" width="300" height="80" class="box"/>
+  <text x="480" y="157" text-anchor="middle" class="label">Application Load Balancer</text>
+  <text x="480" y="184" text-anchor="middle" class="small">Public subnets, port 80</text>
+  <path d="M240 165 H330" class="arrow"/>
+
+  <rect x="60" y="250" width="1260" height="560" class="vpc"/>
+  <text x="90" y="285" class="label">VPC 10.0.0.0/16</text>
+
+  <rect x="100" y="320" width="560" height="440" class="az"/>
+  <text x="130" y="350" class="label">Availability Zone A</text>
+  <rect x="140" y="380" width="220" height="120" class="public"/>
+  <text x="250" y="420" text-anchor="middle" class="label">Public Subnet A</text>
+  <text x="250" y="447" text-anchor="middle" class="small">10.0.0.0/24</text>
+  <text x="250" y="472" text-anchor="middle" class="small">NAT Gateway A</text>
+  <rect x="410" y="380" width="210" height="120" class="public"/>
+  <text x="515" y="420" text-anchor="middle" class="label">Internet Gateway</text>
+  <text x="515" y="447" text-anchor="middle" class="small">Public route 0.0.0.0/0</text>
+
+  <rect x="140" y="560" width="480" height="150" class="private"/>
+  <text x="380" y="595" text-anchor="middle" class="label">Private Subnet A</text>
+  <text x="380" y="622" text-anchor="middle" class="small">10.0.2.0/24</text>
+  <rect x="180" y="640" width="170" height="45" class="box"/>
+  <text x="265" y="668" text-anchor="middle" class="small">EC2 NGINX</text>
+  <rect x="410" y="640" width="170" height="45" class="box"/>
+  <text x="495" y="668" text-anchor="middle" class="small">EC2 NGINX</text>
+
+  <rect x="720" y="320" width="560" height="440" class="az"/>
+  <text x="750" y="350" class="label">Availability Zone B</text>
+  <rect x="760" y="380" width="220" height="120" class="public"/>
+  <text x="870" y="420" text-anchor="middle" class="label">Public Subnet B</text>
+  <text x="870" y="447" text-anchor="middle" class="small">10.0.1.0/24</text>
+  <text x="870" y="472" text-anchor="middle" class="small">NAT Gateway B</text>
+  <rect x="1030" y="380" width="210" height="120" class="public"/>
+  <text x="1135" y="420" text-anchor="middle" class="label">Route Table</text>
+  <text x="1135" y="447" text-anchor="middle" class="small">Public internet route</text>
+
+  <rect x="760" y="560" width="480" height="150" class="private"/>
+  <text x="1000" y="595" text-anchor="middle" class="label">Private Subnet B</text>
+  <text x="1000" y="622" text-anchor="middle" class="small">10.0.3.0/24</text>
+  <rect x="800" y="640" width="170" height="45" class="box"/>
+  <text x="885" y="668" text-anchor="middle" class="small">EC2 NGINX</text>
+  <rect x="1030" y="640" width="170" height="45" class="box"/>
+  <text x="1115" y="668" text-anchor="middle" class="small">EC2 NGINX</text>
+
+  <rect x="765" y="125" width="280" height="80" class="box"/>
+  <text x="905" y="157" text-anchor="middle" class="label">Auto Scaling Group</text>
+  <text x="905" y="184" text-anchor="middle" class="small">Desired capacity: 4</text>
+  <path d="M630 165 H765" class="arrow"/>
+  <path d="M905 205 C780 300 540 520 495 640" class="arrow"/>
+  <path d="M905 205 C720 310 330 510 265 640" class="arrow"/>
+  <path d="M905 205 C930 330 900 520 885 640" class="arrow"/>
+  <path d="M905 205 C1020 330 1110 520 1115 640" class="arrow"/>
+
+  <rect x="1100" y="125" width="220" height="80" class="box"/>
+  <text x="1210" y="157" text-anchor="middle" class="label">IAM Role</text>
+  <text x="1210" y="184" text-anchor="middle" class="small">S3 read access</text>
+  <path d="M1100 165 H1045" class="arrow"/>
+</svg>
