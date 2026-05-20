@@ -25,6 +25,23 @@ Parameters:
     Default: 4
 
 Resources:
+  WebAppBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName}-${EnvironmentName}-app-bucket
+
   WebAppS3ReadRole:
     Type: AWS::IAM::Role
     Properties:
@@ -43,9 +60,12 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - s3:GetObject
                   - s3:ListBucket
-                Resource: "*"
+                Resource: !GetAtt WebAppBucket.Arn
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub ${WebAppBucket.Arn}/*
 
   WebAppInstanceProfile:
     Type: AWS::IAM::InstanceProfile
@@ -66,9 +86,7 @@ Resources:
           ToPort: 80
           CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
+        - IpProtocol: -1
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
@@ -110,7 +128,13 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           yum update -y
+          yum install -y awscli unzip
           amazon-linux-extras install nginx1 -y || yum install -y nginx
+          mkdir -p /tmp/udagram-app
+          aws s3 cp s3://${WebAppBucket}/index.html /tmp/udagram-app/index.html --region ${AWS::Region} || true
+          if [ -s /tmp/udagram-app/index.html ]; then
+            cp /tmp/udagram-app/index.html /usr/share/nginx/html/index.html
+          else
           cat > /usr/share/nginx/html/index.html <<'HTML'
           <!doctype html>
           <html lang="en">
@@ -136,6 +160,7 @@ Resources:
           </body>
           </html>
           HTML
+          fi
           systemctl enable nginx
           systemctl restart nginx
 
@@ -222,3 +247,6 @@ Outputs:
     Value: !Ref TargetGroup
   AutoScalingGroupName:
     Value: !Ref WebAppGroup
+  WebAppBucketName:
+    Description: Private S3 bucket readable by the EC2 instance profile for application artifacts.
+    Value: !Ref WebAppBucket

@@ -39,5 +39,7 @@ flowchart TB
       asg --> ec2b
       asg --> ec2c
       asg --> ec2d
-      iam["IAM Instance Profile\nS3 Read Access"] --> asg
+      s3["Private S3 Bucket\nApplication Artifacts"]
+      iam["IAM Instance Profile\nLeast-Privilege S3 Read Access"] --> asg
+      asg --> s3
     end

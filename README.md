@@ -14,7 +14,8 @@ The solution creates:
 - An Auto Scaling group with four EC2 instances.
 - A launch configuration using a 2 vCPU / 4 GiB instance type and a 10 GB root volume.
 - Security groups that allow public HTTP only to the load balancer and allow web traffic to EC2 only from the load balancer.
-- An IAM instance profile with S3 read permissions, matching the project requirement that the servers have S3 access.
+- A private S3 bucket for application artifacts.
+- An IAM instance profile with least-privilege read access to the application S3 bucket, matching the project requirement that the servers have S3 access.
 
 See `diagrams/architecture.mmd` for the architecture diagram source.
 
@@ -33,6 +34,8 @@ scripts/destroy-all.sh             Deletes both stacks in dependency order
 app/index.html                     Sample app served by NGINX user data
 submission/                        Deployment evidence and screenshots
 ```
+
+The UserData script attempts to read `index.html` from the private S3 application bucket first. If no object has been uploaded yet, it serves the bundled fallback HTML so the stack remains deployable from a clean submission.
 
 ## Deploy
 
