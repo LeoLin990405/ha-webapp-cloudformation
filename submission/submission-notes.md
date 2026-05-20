@@ -11,7 +11,7 @@ Deploy a high-availability web app using CloudFormation.
 
 ## URLs
 
-- Load balancer URL: http://udagra-Appli-SJLJeYkoiYvq-788156309.us-west-2.elb.amazonaws.com
+- Load balancer URL: regenerate after redeploy by reading the `LoadBalancerDNSName` output from `udagram-servers`.
 
 ## Evidence
 
@@ -24,6 +24,8 @@ Deploy a high-availability web app using CloudFormation.
 
 ## Reviewer Notes
 
-- The server template now creates a private S3 bucket and grants EC2 least-privilege read access to that bucket through the instance profile.
-- The EC2 UserData attempts to copy `index.html` from the private S3 bucket, then falls back to the bundled HTML so a clean deployment remains self-contained.
+- The server template now uses `AWS::EC2::LaunchTemplate`; `AWS::AutoScaling::LaunchConfiguration` has been removed.
+- The server template creates a private S3 bucket and grants EC2 least-privilege read access to that bucket through the instance profile.
+- The EC2 UserData downloads `index.htm` from the private S3 bucket and serves it through NGINX; HTML is no longer hardcoded in CloudFormation.
+- `scripts/deploy-all.sh` uploads `app/index.htm` to the generated S3 bucket and starts an Auto Scaling instance refresh so the instances pull the S3-hosted file.
 - The architecture diagram includes the S3 bucket, IAM role, ALB, Auto Scaling group, EC2 instances, public/private subnets, NAT gateways, and Internet Gateway.

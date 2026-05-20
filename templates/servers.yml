@@ -110,59 +110,40 @@ Resources:
         - Key: Name
           Value: !Sub ${ProjectName}-${EnvironmentName}-web-sg
 
-  LaunchConfiguration:
-    Type: AWS::AutoScaling::LaunchConfiguration
+  WebAppLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
     Properties:
-      ImageId: !Ref ImageId
-      InstanceType: !Ref InstanceType
-      IamInstanceProfile: !Ref WebAppInstanceProfile
-      SecurityGroups:
-        - !Ref WebServerSecurityGroup
-      BlockDeviceMappings:
-        - DeviceName: /dev/xvda
-          Ebs:
-            VolumeSize: 10
-            VolumeType: gp3
-            DeleteOnTermination: true
-      UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          yum update -y
-          yum install -y awscli unzip
-          amazon-linux-extras install nginx1 -y || yum install -y nginx
-          mkdir -p /tmp/udagram-app
-          aws s3 cp s3://${WebAppBucket}/index.html /tmp/udagram-app/index.html --region ${AWS::Region} || true
-          if [ -s /tmp/udagram-app/index.html ]; then
-            cp /tmp/udagram-app/index.html /usr/share/nginx/html/index.html
-          else
-          cat > /usr/share/nginx/html/index.html <<'HTML'
-          <!doctype html>
-          <html lang="en">
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Udagram High Availability Demo</title>
-            <style>
-              body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:Arial,Helvetica,sans-serif; background:#101827; color:#f8fafc; }
-              main { max-width:760px; padding:48px; text-align:center; }
-              h1 { font-size:48px; margin-bottom:12px; }
-              p { color:#cbd5e1; font-size:20px; line-height:1.55; }
-              .badge { display:inline-block; margin-top:22px; padding:10px 14px; border:1px solid #38bdf8; border-radius:999px; color:#7dd3fc; }
-              code { color:#facc15; }
-            </style>
-          </head>
-          <body>
-            <main>
-              <h1>Udagram is running.</h1>
-              <p>This NGINX page is served by EC2 instances in private subnets behind an Application Load Balancer.</p>
-              <div class="badge">Host: <code>$(hostname -f)</code></div>
-            </main>
-          </body>
-          </html>
-          HTML
-          fi
-          systemctl enable nginx
-          systemctl restart nginx
+      LaunchTemplateName: !Sub ${ProjectName}-${EnvironmentName}-web-template
+      LaunchTemplateData:
+        ImageId: !Ref ImageId
+        InstanceType: !Ref InstanceType
+        IamInstanceProfile:
+          Name: !Ref WebAppInstanceProfile
+        SecurityGroupIds:
+          - !Ref WebServerSecurityGroup
+        BlockDeviceMappings:
+          - DeviceName: /dev/xvda
+            Ebs:
+              VolumeSize: 10
+              VolumeType: gp3
+              DeleteOnTermination: true
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            set -euxo pipefail
+            yum update -y
+            yum install -y awscli
+            amazon-linux-extras install nginx1 -y || yum install -y nginx
+            systemctl enable nginx
+            echo "Waiting for Udagram index.htm in S3 bucket ${WebAppBucket}..."
+            for attempt in $(seq 1 60); do
+              if aws s3 cp s3://${WebAppBucket}/index.htm /usr/share/nginx/html/index.html --region ${AWS::Region}; then
+                break
+              fi
+              sleep 10
+            done
+            test -s /usr/share/nginx/html/index.html
+            systemctl restart nginx
 
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -225,7 +206,9 @@ Resources:
       MinSize: !Ref MinSize
       MaxSize: !Ref MaxSize
       DesiredCapacity: !Ref DesiredCapacity
-      LaunchConfigurationName: !Ref LaunchConfiguration
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WebAppLaunchTemplate
+        Version: !GetAtt WebAppLaunchTemplate.LatestVersionNumber
       TargetGroupARNs:
         - !Ref TargetGroup
       VPCZoneIdentifier:

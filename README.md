@@ -12,7 +12,7 @@ The solution creates:
 - Two NAT Gateways so private instances can install packages while remaining unreachable from the public internet.
 - An Application Load Balancer with a public HTTP listener.
 - An Auto Scaling group with four EC2 instances.
-- A launch configuration using a 2 vCPU / 4 GiB instance type and a 10 GB root volume.
+- A launch template using a 2 vCPU / 4 GiB instance type and a 10 GB root volume.
 - Security groups that allow public HTTP only to the load balancer and allow web traffic to EC2 only from the load balancer.
 - A private S3 bucket for application artifacts.
 - An IAM instance profile with least-privilege read access to the application S3 bucket, matching the project requirement that the servers have S3 access.
@@ -23,7 +23,7 @@ See `diagrams/architecture.mmd` for the architecture diagram source.
 
 ```text
 templates/network.yml              VPC, subnets, route tables, internet gateway, NAT gateways
-templates/servers.yml              IAM, launch configuration, ASG, ALB, listener, target group
+templates/servers.yml              IAM, launch template, ASG, ALB, listener, target group
 parameters/network-parameters.json Network stack parameters
 parameters/servers-parameters.json Server stack parameters
 scripts/create.sh                  Generic stack creation helper
@@ -31,11 +31,11 @@ scripts/update.sh                  Generic stack update helper
 scripts/delete.sh                  Generic stack deletion helper
 scripts/deploy-all.sh              Deploys both stacks in order
 scripts/destroy-all.sh             Deletes both stacks in dependency order
-app/index.html                     Sample app served by NGINX user data
+app/index.htm                      Sample app uploaded to S3 and downloaded by NGINX user data
 submission/                        Deployment evidence and screenshots
 ```
 
-The UserData script attempts to read `index.html` from the private S3 application bucket first. If no object has been uploaded yet, it serves the bundled fallback HTML so the stack remains deployable from a clean submission.
+The UserData script downloads `index.htm` from the private S3 application bucket and serves that file through NGINX. The deployment script uploads `app/index.htm` to the bucket and refreshes the Auto Scaling group so the EC2 instances serve the S3-hosted artifact instead of hardcoded CloudFormation HTML.
 
 ## Deploy
 
@@ -75,10 +75,10 @@ aws cloudformation validate-template --template-body file://templates/servers.ym
 
 ## Deployment Result
 
-The stacks were deployed successfully in `us-west-2`.
+The stacks should be deployed in `us-west-2`.
 
 - Network stack: `udagram-network`
 - Server stack: `udagram-servers`
-- Load balancer URL: <http://udagra-Appli-SJLJeYkoiYvq-788156309.us-west-2.elb.amazonaws.com>
+- Load balancer URL: run `./scripts/deploy-all.sh` or inspect the `LoadBalancerDNSName` output from the `udagram-servers` stack.
 
-The target group reported four healthy EC2 targets after deployment. Evidence and screenshots are stored under `submission/`.
+The reviewer should be able to open the Load Balancer URL and see `It works! Udagram, Udacity`. If the stack is deleted before review, include screenshots for both stack outputs with deployment timestamps, successful access to the Load Balancer URL, and the S3 bucket containing `index.htm`.
