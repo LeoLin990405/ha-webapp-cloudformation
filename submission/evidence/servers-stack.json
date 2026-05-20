@@ -1,7 +1,7 @@
 {
     "Stacks": [
         {
-            "StackId": "arn:aws:cloudformation:us-west-2:835207447818:stack/udagram-servers/46f7d920-50ca-11f1-8619-0a5b5412e449",
+            "StackId": "arn:aws:cloudformation:us-west-2:224429379372:stack/udagram-servers/aeffd6a0-5438-11f1-8752-06610e8e418f",
             "StackName": "udagram-servers",
             "Description": "Highly available Udagram web servers, load balancer, and Auto Scaling group.",
             "Parameters": [
@@ -34,7 +34,7 @@
                     "ParameterValue": "4"
                 }
             ],
-            "CreationTime": "2026-05-16T01:55:12.975000+00:00",
+            "CreationTime": "2026-05-20T10:43:05.650000+00:00",
             "RollbackConfiguration": {},
             "StackStatus": "CREATE_COMPLETE",
             "DisableRollback": false,
@@ -45,17 +45,22 @@
             "Outputs": [
                 {
                     "OutputKey": "LoadBalancerDNSName",
-                    "OutputValue": "http://udagra-Appli-SJLJeYkoiYvq-788156309.us-west-2.elb.amazonaws.com",
+                    "OutputValue": "http://udagra-Appli-L9Ppaf8Chf5n-677445926.us-west-2.elb.amazonaws.com",
                     "Description": "Public URL of the deployed high availability web application.",
                     "ExportName": "udagram-ha-LoadBalancerURL"
                 },
                 {
                     "OutputKey": "TargetGroupArn",
-                    "OutputValue": "arn:aws:elasticloadbalancing:us-west-2:835207447818:targetgroup/udagra-Targe-QVUKNYZ0IPZ3/fe45f944f6f25820"
+                    "OutputValue": "arn:aws:elasticloadbalancing:us-west-2:224429379372:targetgroup/udagra-Targe-LPDLY9JBI4LM/c9dbb8763a7dd45b"
                 },
                 {
                     "OutputKey": "AutoScalingGroupName",
-                    "OutputValue": "udagram-servers-WebAppGroup-2iUsehymbJzI"
+                    "OutputValue": "udagram-servers-WebAppGroup-AWcmcLwVKd7C"
+                },
+                {
+                    "OutputKey": "WebAppBucketName",
+                    "OutputValue": "udagram-servers-webappbucket-4utkhu6fsmz4",
+                    "Description": "Private S3 bucket readable by the EC2 instance profile for application artifacts."
                 }
             ],
             "Tags": [],
@@ -66,7 +71,7 @@
             "LastOperations": [
                 {
                     "OperationType": "CREATE_STACK",
-                    "OperationId": "46f911a0-50ca-11f1-8619-0a5b5412e449"
+                    "OperationId": "af010f20-5438-11f1-8752-06610e8e418f"
                 }
             ]
         }

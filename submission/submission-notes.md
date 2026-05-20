@@ -11,7 +11,7 @@ Deploy a high-availability web app using CloudFormation.
 
 ## URLs
 
-- Load balancer URL: regenerate after redeploy by reading the `LoadBalancerDNSName` output from `udagram-servers`.
+- Load balancer URL: http://udagra-Appli-L9Ppaf8Chf5n-677445926.us-west-2.elb.amazonaws.com
 
 ## Evidence
 
@@ -21,6 +21,8 @@ Deploy a high-availability web app using CloudFormation.
 - `submission/evidence/servers-stack.json` records the deployed server stack and ALB URL output.
 - `submission/evidence/autoscaling-group.json` records ASG desired/min/max capacity and launched instances.
 - `submission/evidence/target-health.json` records four healthy targets in the target group.
+- `submission/evidence/s3-bucket-objects.json` records the S3 bucket object `index.htm`.
+- `submission/evidence/alb-page.html` records the working page returned by the ALB.
 
 ## Reviewer Notes
 

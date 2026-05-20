@@ -1,7 +1,7 @@
 {
     "Stacks": [
         {
-            "StackId": "arn:aws:cloudformation:us-west-2:835207447818:stack/udagram-network/b1dec010-50c9-11f1-8fa0-02557f57a807",
+            "StackId": "arn:aws:cloudformation:us-west-2:224429379372:stack/udagram-network/6281c6d0-5438-11f1-92b0-0a2a535ef5b7",
             "StackName": "udagram-network",
             "Description": "High availability network infrastructure for the Udacity CloudFormation project.",
             "Parameters": [
@@ -34,7 +34,7 @@
                     "ParameterValue": "10.0.0.0/24"
                 }
             ],
-            "CreationTime": "2026-05-16T01:51:02.836000+00:00",
+            "CreationTime": "2026-05-20T10:40:57.332000+00:00",
             "RollbackConfiguration": {},
             "StackStatus": "CREATE_COMPLETE",
             "DisableRollback": false,
@@ -45,17 +45,17 @@
             "Outputs": [
                 {
                     "OutputKey": "PrivateSubnets",
-                    "OutputValue": "subnet-0c4188d25599338fc,subnet-02efd5e3370adfa20",
+                    "OutputValue": "subnet-09c7ada537bcaa8ca,subnet-0eabfdf09f5ac854a",
                     "ExportName": "udagram-ha-PrivateSubnets"
                 },
                 {
                     "OutputKey": "VpcId",
-                    "OutputValue": "vpc-0258890e2a12226f7",
+                    "OutputValue": "vpc-075a0a704accfbac9",
                     "ExportName": "udagram-ha-VpcId"
                 },
                 {
                     "OutputKey": "PublicSubnets",
-                    "OutputValue": "subnet-04b2240eff236ed9d,subnet-0b0bdbad89e565cd9",
+                    "OutputValue": "subnet-071437e82cc44c479,subnet-0ca4647a3eb10f00a",
                     "ExportName": "udagram-ha-PublicSubnets"
                 }
             ],
@@ -67,7 +67,7 @@
             "LastOperations": [
                 {
                     "OperationType": "CREATE_STACK",
-                    "OperationId": "b1e06dc0-50c9-11f1-8fa0-02557f57a807"
+                    "OperationId": "62834d70-5438-11f1-92b0-0a2a535ef5b7"
                 }
             ]
         }

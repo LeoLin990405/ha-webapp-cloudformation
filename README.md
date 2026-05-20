@@ -79,6 +79,6 @@ The stacks should be deployed in `us-west-2`.
 
 - Network stack: `udagram-network`
 - Server stack: `udagram-servers`
-- Load balancer URL: run `./scripts/deploy-all.sh` or inspect the `LoadBalancerDNSName` output from the `udagram-servers` stack.
+- Load balancer URL: <http://udagra-Appli-L9Ppaf8Chf5n-677445926.us-west-2.elb.amazonaws.com>
 
 The reviewer should be able to open the Load Balancer URL and see `It works! Udagram, Udacity`. If the stack is deleted before review, include screenshots for both stack outputs with deployment timestamps, successful access to the Load Balancer URL, and the S3 bucket containing `index.htm`.
